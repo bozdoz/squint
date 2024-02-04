@@ -1,0 +1,20 @@
+services:
+  app:
+    volumes:
+      - static:/app/static_root
+      - ./app/assets:/app/assets
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - ${PORT:-1999}:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - static:/public:ro
+      - ./assets:/assets:ro
+    depends_on:
+      - app
+    restart: on-failure
+
+volumes:
+  static:
