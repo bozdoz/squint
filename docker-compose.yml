@@ -10,19 +10,19 @@ services:
     env_file: .env
     ports:
       - ${PORT:-1999}:8000
-    depends_on: 
+    depends_on:
       - db
   redis:
     image: redis:7-alpine
   db:
     image: mariadb:11.2
     env_file: .env
-    volumes:
-      - db_data:/var/lib/mysql
-      # - ./docker/db:/docker-entrypoint-initdb.d
+    # volumes:
+    # - db_data:/var/lib/mysql
+    # - ./docker/db:/docker-entrypoint-initdb.d
     restart: always
     environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASS}
