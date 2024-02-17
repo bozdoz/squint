@@ -1,0 +1,28 @@
+{
+  "name": "scraper",
+  "version": "1.0.0",
+  "description": "This is what does the scraping",
+  "private": true,
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "test": "npm run lint && tsc --noEmit",
+    "lint": "eslint . --cache --fix --ext .ts,.tsx"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": "^20.11.0"
+  },
+  "engineStrict": true,
+  "devDependencies": {
+    "@playwright/browser-firefox": "^1.41.2",
+    "@types/node": "^20.11.17",
+    "@typescript-eslint/eslint-plugin": "^7.0.1",
+    "@typescript-eslint/parser": "^7.0.1",
+    "eslint": "^8.56.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "playwright": "^1.41.2"
+  }
+}
