@@ -1,3 +1,5 @@
+import urllib.request
+
 from django.contrib import admin
 
 # Register your models here.
@@ -46,10 +48,22 @@ class UserInstitutionAdmin(admin.ModelAdmin):
 
         return initial
 
+    def save_model(self, request, obj, form, change):
+        # TODO: encrypt password if changed
+        if change and form.is_valid():
+            response = urllib.request.urlopen("http://scraper:3000")
+
+            if response.getcode() == 200:
+                output = response.read()
+                print(output)
+            else:
+                print(response.getcode())
+
+        super().save_model(request, obj, form, change)
+
     def get_form(self, request, obj=None, **kwargs):
         if obj is None:
             kwargs["form"] = UserInstitutionAddForm
-        print(kwargs)
         return super().get_form(request, obj, **kwargs)
 
 

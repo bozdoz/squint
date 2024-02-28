@@ -1,7 +1,7 @@
 services:
   app:
     build:
-      context: app
+      context: ./app
       # TODO
       target: base
     command: python manage.py runserver 0.0.0.0:8000
@@ -12,8 +12,15 @@ services:
       - ${PORT:-1999}:8000
     depends_on:
       - db
-  redis:
-    image: redis:7-alpine
+  scraper:
+    build: ./scraper
+    user: node
+    init: true
+    mem_limit: 300M
+    memswap_limit: 1G
+    restart: on-failure:3
+    environment:
+      - NODE_ENV=production
   db:
     image: mariadb:11.2
     env_file: .env

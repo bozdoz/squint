@@ -9,6 +9,7 @@
     "emitDecoratorMetadata": true,
     "noUnusedLocals": true,
     "pretty": true,
+    "skipLibCheck": true,
     "lib": [
       "esnext"
     ]

@@ -1,25 +1,34 @@
-import { firefox, devices } from "playwright";
-import { signin } from "./accounts/BMO/signin";
+import express from "express";
+import { encrypt } from "./encrypt";
+const app = express();
+const port = 3000;
 
-(async () => {
-  // Setup
-  const browser = await firefox.launch({ headless: false, devtools: true });
-  const context = await browser.newContext(devices["Desktop Firefox"]);
-  const page = await context.newPage();
+app.use(express.json());
 
-  // don't fetch any images
-  await context.route("**/*.{webp,gif,svg,png,jpg,jpeg}", (route) =>
-    route.abort()
-  );
+app.use(express.urlencoded({ extended: true }));
 
-  const login = "1111222233334444";
-  const password = "asdfasdfasdfasdfasdfasdf";
+app.get("/", (req, res) => {
+  res.send("hello world");
+});
 
-  await signin({ page, login, password });
+app.post("/encrypt", async (req, res) => {
+  const { login, password } = req.body;
 
-  process.addListener("SIGINT", async () => {
-    // Teardown
-    await context.close();
-    await browser.close();
-  });
-})();
+  if (login && password) {
+    const encUser = await encrypt(login);
+    const encPass = await encrypt(password);
+    res.send(
+      `got post: ${JSON.stringify({
+        user: { ...encUser },
+        pass: { ...encPass },
+      })}`
+    );
+    return;
+  }
+
+  res.status(500).send("You dummy");
+});
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
+});
