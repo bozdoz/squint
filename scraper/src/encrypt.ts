@@ -39,7 +39,7 @@ export async function encrypt(plaintext: string): Promise<Encrypted> {
   // iv needs to be 12 bytes
   const iv = crypto.randomBytes(12);
   const cipher = crypto.createCipheriv(ALGO, key, iv);
-  const encrypted = Buffer.concat([cipher.update(plaintext), cipher.final()]);
+  const encrypted = Buffer.concat([cipher.update(salt.toString('hex') + plaintext), cipher.final()]);
 
   // all fields can be stored together and used for decryption
   return {
@@ -52,7 +52,8 @@ export async function encrypt(plaintext: string): Promise<Encrypted> {
 
 // Warning: could throw Error
 export async function decrypt(encrypted: Encrypted): Promise<string> {
-  const key = await getKey(Buffer.from(encrypted.salt, "hex"));
+  const salt = Buffer.from(encrypted.salt, "hex")
+  const key = await getKey(salt);
   const iv = Buffer.from(encrypted.iv, "hex");
   const encryptedText = Buffer.from(encrypted.data, "hex");
 
@@ -64,7 +65,7 @@ export async function decrypt(encrypted: Encrypted): Promise<string> {
     decipher.final(),
   ]);
 
-  return decrypted.toString();
+  return decrypted.toString().substring(encrypted.salt.length);
 }
 
 (async () => {

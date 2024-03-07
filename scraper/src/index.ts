@@ -17,12 +17,10 @@ app.post("/encrypt", async (req, res) => {
   if (login && password) {
     const encUser = await encrypt(login);
     const encPass = await encrypt(password);
-    res.send(
-      `got post: ${JSON.stringify({
-        user: { ...encUser },
-        pass: { ...encPass },
-      })}`
-    );
+    res.send({
+      user: { ...encUser },
+      pass: { ...encPass },
+    });
     return;
   }
 

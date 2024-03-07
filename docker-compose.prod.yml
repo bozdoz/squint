@@ -1,5 +1,6 @@
 services:
   app:
+    # TODO: command
     volumes:
       - static:/app/static_root
       - ./app/assets:/app/assets
@@ -14,7 +15,14 @@ services:
       - ./assets:/assets:ro
     depends_on:
       - app
-    restart: on-failure
+    restart: on-failure:3
+
+  db:
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
 
 volumes:
   static:

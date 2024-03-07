@@ -4,8 +4,8 @@ set -ex
 
 waitfor() {
   local CMD="$1"
-  local DELAY=5
-  local MAX_TRIES=5
+  local DELAY=10
+  local MAX_TRIES=3
   local n=0
 
   while true; do
