@@ -30,10 +30,9 @@ if [ "$1" == 'gunicorn' ] || [[ "$@" == *"runserver"* ]]; then
     python manage.py collectstatic --no-input"
 fi
 
-# dev command
-# if [[ "$@" == *"runserver"* ]]; then
-  # maybe we have to populate the database with fixtures?
-  # waitfor "python manage.py loaddata **/fixtures/*.json"
-# fi
+# dev command (populate the database)
+if [[ "$@" == *"runserver"* ]]; then
+  waitfor "python manage.py loaddata **/fixtures/*.json"
+fi
 
 exec "$@"

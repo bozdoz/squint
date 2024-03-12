@@ -1,0 +1,50 @@
+[
+  {
+    "model": "transactions.institution",
+    "pk": 1,
+    "fields": { "name": "BMO", "notes": "" }
+  },
+  {
+    "model": "transactions.userinstitution",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "institution": 1,
+      "login": null,
+      "password": null,
+      "encrypted_login": "{\"iv\": \"429046b64fb20d56f40a448d\", \"data\": \"ec4a1dd022d787090f2801bc483b13fc4c4346ccb0c2b6536085a7905e95167a6a7fd0b4af95c3eadf7f71d4c5fe609a92a73e9b7f1fb71c82e5ebc858c2ddd1bcacb01de87df670b7cc245688d1432f122da044a85faa6839553b73c60f0f04ac9274cf39ccf8f4218f22641dbc9cf6f8120025dd314afdfa81b9bb4e113c4d2d19cd\", \"salt\": \"5da216c6f375626c48332210fe9575c41c66880a7fdeb0b8980369f14d2f6af0e79287ea9565972604cd691461502ca473d41f1b359e629424d55a0f1af6ad55c743518c908ff31774d388786dfaf9049046ce1c34711e09b82126f7896409e718e60a9ff74e7df696744515d6277563caf2eb4eef9e899be65f04e0a18cddb4\", \"auth\": \"3863b1e8dc84df5bbb87a728ed1035be\"}",
+      "encrypted_password": "{\"iv\": \"0cd17b857e608a97ca43ad2a\", \"data\": \"e66203391ce6a583594d76d313247e8d15e1f8b641382eb29565188c9e953fd10739770de64d879e1cd6a45ba85f23be0c4aa3af5aec762bc8683afe02ff371ed8b00eac07ccf64ae012f37b0ee757daea99a918140d99ddc0f906948f7b5100d5ff1aee79e9c90448d6ede27ad6133c5add0c03bf4f8d7275c28246b3603aad3afb103ae402\", \"salt\": \"60439f487129c37b6f8c0f490b6668225b52d67db7cf149fb88672458027e63eb8b3f717646d343819e02ec5476056cd10d4bd6406b4bbcec06126fd2d7225a4708b8842410102faac2fd2c632532494821f5d419a9b265564489a1de41792ad1933524d325bca9e858016caf792a91456669a0ec7c7ec4e14db5459fe8accf2\", \"auth\": \"ea8be31e04b0568b7577340536a9609f\"}"
+    }
+  },
+  {
+    "model": "transactions.account",
+    "pk": 1,
+    "fields": {
+      "user_institution": 1,
+      "name": "Chequing 5689",
+      "description": "my chequing account",
+      "enabled": true
+    }
+  },
+  {
+    "model": "transactions.userlabel",
+    "pk": 1,
+    "fields": { "user": 1, "name": "burgers" }
+  },
+  {
+    "model": "transactions.transaction",
+    "pk": 1,
+    "fields": {
+      "account": 1,
+      "date": "2024-03-07",
+      "vendor": "Five Guys",
+      "description": "burgers",
+      "modified_description": "burgers",
+      "amount": 89,
+      "transaction_type": "DEBIT",
+      "category": "category",
+      "notes": "notes",
+      "labels": [1]
+    }
+  }
+]

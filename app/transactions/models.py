@@ -95,8 +95,9 @@ class Transaction(models.Model):
     modified_description = models.CharField(max_length=100, null=True, blank=True)
     amount = models.PositiveIntegerField(help_text="amount in cents!")
     transaction_type = models.CharField(max_length=10, choices=TRANSACTION_CHOICES)
-    # TODO: foreign key
+    # TODO: foreign key, optional?
     category = models.CharField(max_length=100)
+    # TODO: optional
     notes = models.CharField(max_length=150)
     labels = models.ManyToManyField(UserLabel, blank=True)
 
