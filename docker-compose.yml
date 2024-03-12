@@ -1,31 +1,25 @@
 services:
   app:
-    build:
-      context: app
-      # TODO
-      target: base
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./app:/app
     env_file: .env
-    ports:
-      - ${PORT:-1999}:8000
     depends_on:
       - db
-  redis:
-    image: redis:7-alpine
+
+  scraper:
+    build: ./scraper
+    user: node
+    init: true
+    mem_limit: 300M
+    memswap_limit: 1G
+    restart: on-failure:3
+    environment:
+      - NODE_ENV=production
+
   db:
     image: mariadb:11.2
     env_file: .env
-    # volumes:
-    # - db_data:/var/lib/mysql
-    # - ./docker/db:/docker-entrypoint-initdb.d
-    restart: always
-    environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASS}
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: on-failure:3
 
 volumes:
   db_data:

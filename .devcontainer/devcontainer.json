@@ -5,6 +5,7 @@
   // Update the 'dockerComposeFile' list if you have more compose files or use different names.
   // The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
   "dockerComposeFile": [
+    "../docker-compose.dev.yml",
     "../docker-compose.yml",
     "docker-compose.yml"
   ],
@@ -29,7 +30,8 @@
     "vscode": {
       "extensions": [
         "ms-python.python",
-        "ms-python.black-formatter"
+        "ms-python.black-formatter",
+        "esbenp.prettier-vscode"
       ]
     }
   }

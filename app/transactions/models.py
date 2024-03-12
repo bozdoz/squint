@@ -1,36 +1,17 @@
+import json
+import urllib.request
+
 from django.db import models
 from django import forms
 from django.contrib.auth.models import User
 
 
-# TODO: needs more details for *how* to get account details
 class Institution(models.Model):
     name = models.CharField(max_length=100)
-    login_page = models.URLField()
     notes = models.TextField(null=True, blank=True)
-    details_page = models.URLField()
 
     def __str__(self):
         return self.name
-
-
-class PasswordField(forms.CharField):
-    widget = forms.PasswordInput()
-
-
-class PasswordModelField(models.CharField):
-    """
-    Django Password Field
-    """
-
-    def formfield(self, **kwargs):
-        defaults = {"form_class": PasswordField}
-        defaults.update(kwargs)
-        return super(PasswordModelField, self).formfield(**defaults)
-
-
-def getRandomPassword():
-    return User.objects.make_random_password(length=24)
 
 
 class UserInstitution(models.Model):
@@ -38,10 +19,36 @@ class UserInstitution(models.Model):
     institution = models.ForeignKey(
         Institution, on_delete=models.SET_NULL, null=True, blank=True
     )
-    login = models.CharField(max_length=100)
-    password = PasswordModelField(
-        max_length=50, help_text="ch0053 50m37h1n6 600d! :D", default=getRandomPassword
-    )
+    login = models.CharField(max_length=100, null=True, blank=True)
+    password = models.CharField(max_length=100, null=True, blank=True)
+    encrypted_login = models.TextField(null=True, blank=True)
+    encrypted_password = models.TextField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.login or self.password:
+            data = {
+                "login": self.login,
+                "password": self.password,
+            }
+            data = urllib.parse.urlencode(data).encode()
+
+            with urllib.request.urlopen(
+                "http://scraper:3000/encrypt", data=data
+            ) as response:
+                if response.getcode() == 200:
+                    output = json.loads(response.read())
+                    print(output)
+                    if self.login:
+                        self.encrypted_login = json.dumps(output["user"])
+                    if self.password:
+                        self.encrypted_password = json.dumps(output["pass"])
+
+            self.login = None
+            self.password = None
+
+        # do something with the response
+        # Add your custom logic here
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return "%s %s" % (self.user, self.institution)
@@ -88,8 +95,9 @@ class Transaction(models.Model):
     modified_description = models.CharField(max_length=100, null=True, blank=True)
     amount = models.PositiveIntegerField(help_text="amount in cents!")
     transaction_type = models.CharField(max_length=10, choices=TRANSACTION_CHOICES)
-    # TODO: foreign key
+    # TODO: foreign key, optional?
     category = models.CharField(max_length=100)
+    # TODO: optional
     notes = models.CharField(max_length=150)
     labels = models.ManyToManyField(UserLabel, blank=True)
 

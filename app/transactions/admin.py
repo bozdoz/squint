@@ -11,24 +11,6 @@ class InstitutionAdmin(admin.ModelAdmin):
 admin.site.register(Institution, InstitutionAdmin)
 
 
-class UserInstitutionAddForm(forms.ModelForm):
-    class Meta:
-        model = UserInstitution
-        fields = "__all__"
-        widgets = {"password": forms.PasswordInput(render_value=True)}
-
-
-# TODO: do something about showing login/passwords
-class UserInstitutionChangeForm(forms.ModelForm):
-    class Meta:
-        model = UserInstitution
-        fields = "__all__"
-        widgets = {
-            "login": forms.TextInput(),
-            "password": forms.PasswordInput(render_value=False),
-        }
-
-
 class AccountInline(admin.StackedInline):
     model = Account
     extra = 0
@@ -36,7 +18,6 @@ class AccountInline(admin.StackedInline):
 
 
 class UserInstitutionAdmin(admin.ModelAdmin):
-    form = UserInstitutionChangeForm
     list_display = ["user", "institution"]
     inlines = [AccountInline]
 
@@ -45,12 +26,6 @@ class UserInstitutionAdmin(admin.ModelAdmin):
         initial["user"] = request.user.pk
 
         return initial
-
-    def get_form(self, request, obj=None, **kwargs):
-        if obj is None:
-            kwargs["form"] = UserInstitutionAddForm
-        print(kwargs)
-        return super().get_form(request, obj, **kwargs)
 
 
 admin.site.register(UserInstitution, UserInstitutionAdmin)
